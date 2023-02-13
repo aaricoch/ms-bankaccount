@@ -3,3 +3,5 @@
 -- insert into myentity (id, field) values(nextval('hibernate_sequence'), 'field-1');
 -- insert into myentity (id, field) values(nextval('hibernate_sequence'), 'field-2');
 -- insert into myentity (id, field) values(nextval('hibernate_sequence'), 'field-3');
+insert into bankaccounttype (idbankaccounttype, description) values(nextval('hibernate_sequence'), 'AHORRO');
+insert into bankaccounttype (idbankaccounttype, description) values(nextval('hibernate_sequence'), 'CORRIENTE');
