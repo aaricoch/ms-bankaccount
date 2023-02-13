@@ -1,2 +1,2 @@
-# ms-managebankaccount
+# ms-bankaccount
 ManageBankAccount - Business Microservice
