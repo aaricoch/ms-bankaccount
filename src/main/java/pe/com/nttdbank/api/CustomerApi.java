@@ -14,8 +14,8 @@ import pe.com.nttdbank.api.model.responseCustomerApi;
 public interface CustomerApi {
 
     @GET
-    @Path("/{id}")
-    responseCustomerApi getById(@PathParam("id") String id);
+    @Path("{id}")
+    responseCustomerApi getById(@PathParam("id") Long id);
 
     @GET
     List<responseCustomerApi> getAll();

@@ -45,7 +45,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     public Boolean Create(BankAccountDto bankAccountDto) {
         BankAccount bankAccount = toBankAccount(bankAccountDto);
         // Validar Cliente
-        if (!findCustomer(bankAccount.getIdCustomer().toString())) {
+        if (!findCustomer(bankAccount.getIdCustomer())) {
             return false;
         }
         // Validar Cuenta
@@ -57,11 +57,15 @@ public class BankAccountServiceImpl implements BankAccountService {
         return bankAccountRepository.Create(bankAccount);
     }
 
-    private boolean findCustomer(String id) {
-        // responseCustomerApi customer = customerApi.getById(id);
-        List<responseCustomerApi> customer = customerApi.getAll();
-        // if (customer != null && customer.getId() > 0)
-        if (customer != null && customer.size() > 0) {
+    private boolean findCustomer(Long id) {
+        responseCustomerApi customer = new responseCustomerApi();
+        try {
+            customer = customerApi.getById(id);
+        } catch (Exception e) {
+            customer = null;
+        }
+        
+        if (customer != null && customer.getId() > 0) {
             return true;
         }
         return false;
