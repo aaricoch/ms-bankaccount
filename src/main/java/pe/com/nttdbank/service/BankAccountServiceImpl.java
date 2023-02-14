@@ -3,8 +3,12 @@ package pe.com.nttdbank.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import pe.com.nttdbank.api.CustomerApi;
+import pe.com.nttdbank.api.model.responseCustomerApi;
 import pe.com.nttdbank.dto.BankAccountDto;
 import pe.com.nttdbank.model.BankAccount;
 import pe.com.nttdbank.model.BankAccountType;
@@ -15,6 +19,9 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     @Inject
     BankAccountRepository bankAccountRepository;
+
+    @RestClient
+    CustomerApi customerApi;
 
     public List<BankAccountDto> getAll() {
         List<BankAccount> bankAccounts = bankAccountRepository.getAll();
@@ -37,9 +44,10 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     public Boolean Create(BankAccountDto bankAccountDto) {
         BankAccount bankAccount = toBankAccount(bankAccountDto);
-
         // Validar Cliente
-
+        if (!findCustomer(bankAccount.getIdCustomer().toString())) {
+            return false;
+        }
         // Validar Cuenta
         if (bankAccountRepository.CountByBankAccount(bankAccountDto.getNumeroCuenta()) > 0) {
             // throw new NullPointerException("Already registered BankAccount");
@@ -47,6 +55,16 @@ public class BankAccountServiceImpl implements BankAccountService {
         }
 
         return bankAccountRepository.Create(bankAccount);
+    }
+
+    private boolean findCustomer(String id) {
+        // responseCustomerApi customer = customerApi.getById(id);
+        List<responseCustomerApi> customer = customerApi.getAll();
+        // if (customer != null && customer.getId() > 0)
+        if (customer != null && customer.size() > 0) {
+            return true;
+        }
+        return false;
     }
 
     public Boolean Delete(Long id) {
